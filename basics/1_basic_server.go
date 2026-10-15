@@ -7,15 +7,20 @@ import (
 )
 
 func main(){
-	http.HandleFunc("GET /", func(w http.ResponseWriter, r *http.Request) {
-		w.Write([]byte("welcome to the server"))
-	})
+	mux := http.NewServeMux()
 
-	fmt.Println("Server is starting at port :8000")
+	mux.HandleFunc("GET /", home)
 
-	err := http.ListenAndServe(":8000", nil)
+	fmt.Println("starting the server at port 8000")
+
+	err := http.ListenAndServe(":8000", mux)
 
 	if err != nil {
 		log.Fatal(err)
 	}
+
+}
+
+func home(w http.ResponseWriter, r *http.Request){
+	w.Write([]byte("Welcome to the server"))
 }
