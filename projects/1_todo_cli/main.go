@@ -1,6 +1,10 @@
 package main
 
-import "fmt"
+import (
+    "bufio"
+    "fmt"
+    "os"
+)	
 
 type Tasks struct {
 	title    string
@@ -49,10 +53,10 @@ func main() {
 
 		switch choise {
 		case 1:
-			viewAllTask()
+			addTask()
 			continue
 		case 2:
-			fmt.Println("chose 2")
+			viewAllTask()
 			continue
 		case 3:
 			fmt.Println("chose 3")
@@ -84,4 +88,27 @@ func viewAllTask() {
 	}else{
 		fmt.Println("No task to show!!")
 	}
+}
+
+
+
+func addTask(){
+
+	scanner := bufio.NewScanner(os.Stdin)
+
+	newtask := Tasks{
+		title: "",
+		finished: false,
+	}
+
+	
+	fmt.Print("Enter the task tile: ")
+	 if scanner.Scan() {
+        newtask.title = scanner.Text()
+    }
+
+	taskList = append(taskList, newtask)
+	fmt.Println("")
+
+	viewAllTask()
 }
