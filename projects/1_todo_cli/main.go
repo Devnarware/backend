@@ -117,16 +117,16 @@ func addTask(){
 func completeTask(){
 	viewAllTask()
 
-	del := 0
-	fmt.Println("Enter the number of task you want to delete or 0 to discard: ")
-	fmt.Scan(&del)
+	completed := 0
+	fmt.Print("Enter the number of task you completed or 0 to discard: ")
+	fmt.Scan(&completed)
 
-	if del == 0 || del > len(taskList) {
+	if completed == 0 || completed > len(taskList) {
 		fmt.Println("No task is removed")
 		return
 	}
 
-	taskList = slices.Delete(taskList, del-1, del)
+	taskList[completed-1].finished = true
 
 	viewAllTask()
 }
@@ -135,7 +135,7 @@ func deleteTask(){
 	viewAllTask()
 
 	del := 0
-	fmt.Println("Enter the number of task you want to delete or 0 to discard: ")
+	fmt.Print("Enter the number of task you want to delete or 0 to discard: ")
 	fmt.Scan(&del)
 
 	if del == 0 || del > len(taskList) {
