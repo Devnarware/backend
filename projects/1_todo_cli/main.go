@@ -1,9 +1,10 @@
 package main
 
 import (
-    "bufio"
-    "fmt"
-    "os"
+	"bufio"
+	"fmt"
+	"os"
+	"slices"
 )	
 
 type Tasks struct {
@@ -59,7 +60,7 @@ func main() {
 			viewAllTask()
 			continue
 		case 3:
-			fmt.Println("chose 3")
+			completeTask()
 			continue
 		case 4:
 			fmt.Println("chose 4")
@@ -83,7 +84,7 @@ func viewAllTask() {
 			if taskList[i].finished {
 				status = "✅"
 			}
-			fmt.Println(taskList[i].title+" ", status)
+			fmt.Println(i+1, taskList[i].title + " ", status)
 		}
 	}else{
 		fmt.Println("No task to show!!")
@@ -101,7 +102,7 @@ func addTask(){
 		finished: false,
 	}
 
-	
+
 	fmt.Print("Enter the task tile: ")
 	 if scanner.Scan() {
         newtask.title = scanner.Text()
@@ -109,6 +110,23 @@ func addTask(){
 
 	taskList = append(taskList, newtask)
 	fmt.Println("")
+
+	viewAllTask()
+}
+
+func completeTask(){
+	viewAllTask()
+
+	del := 0
+	fmt.Println("Enter the number of task you want to delete or 0 to discard: ")
+	fmt.Scan(&del)
+
+	if del == 0 || del > len(taskList) {
+		fmt.Println("No task is removed")
+		return
+	}
+
+	taskList = slices.Delete(taskList, del-1, del)
 
 	viewAllTask()
 }
