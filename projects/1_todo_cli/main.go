@@ -2,51 +2,50 @@ package main
 
 import "fmt"
 
-type Tasks struct{
+type Tasks struct {
 	title    string
-	finished  bool
+	finished bool
 }
 
 var taskList []Tasks
 
+func main() {
 
-func main(){
-	
 	choise := 0
 	newtask := Tasks{
-		title: "1st task",
+		title:    "1st task",
 		finished: false,
 	}
 	taskList = append(taskList, newtask)
 	taskList = append(taskList, Tasks{
-		title: "2nd task",
+		title:    "2nd task",
 		finished: true,
 	})
 	taskList = append(taskList, Tasks{
-		title: "3rd task",
+		title:    "3rd task",
 		finished: false,
 	})
 	taskList = append(taskList, Tasks{
-		title: "4th task",
+		title:    "4th task",
 		finished: false,
 	})
 	taskList = append(taskList, Tasks{
-		title: "5th task",
+		title:    "5th task",
 		finished: true,
 	})
 
-	fmt.Println(taskList)
-	
-	for choise != 5{
+	for choise != 5 {
+		fmt.Println("")
 		fmt.Println("========= TODO CLI =========")
-
+		
 		// show menu
-		fmt.Printf(
-			"1. Add a Task\n2. View all Task\n3. Complete a Task\n4. Delete a Task\n5. Exit\n")
-
+		fmt.Printf("1. Add a Task\n2. View all Task\n3. Complete a Task\n4. Delete a Task\n5. Exit\n")
+		fmt.Println("")
+		
 		// choose an option
 		fmt.Print("Choose an option: ")
 		fmt.Scan(&choise)
+		fmt.Println("")
 
 		switch choise {
 		case 1:
@@ -66,16 +65,23 @@ func main(){
 			continue
 		}
 	}
+	fmt.Println("")
 
 }
 
+func viewAllTask() {
 
-func viewAllTask(){
-	for i := 0; i < len(taskList); i++ {
-		status := "❌"
-		if taskList[i].finished {
-			status = "✅"
+	if len(taskList) > 0 {
+		fmt.Println("All the task are below:")
+
+		for i := 0; i < len(taskList); i++ {
+			status := "❌"
+			if taskList[i].finished {
+				status = "✅"
+			}
+			fmt.Println(taskList[i].title+" ", status)
 		}
-		fmt.Println(taskList[i].title + " ", status)
+	}else{
+		fmt.Println("No task to show!!")
 	}
 }
