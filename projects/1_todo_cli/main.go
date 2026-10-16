@@ -17,27 +17,27 @@ var taskList []Tasks
 func main() {
 
 	choise := 0
-	newtask := Tasks{
-		title:    "1st task",
-		finished: false,
-	}
-	taskList = append(taskList, newtask)
-	taskList = append(taskList, Tasks{
-		title:    "2nd task",
-		finished: true,
-	})
-	taskList = append(taskList, Tasks{
-		title:    "3rd task",
-		finished: false,
-	})
-	taskList = append(taskList, Tasks{
-		title:    "4th task",
-		finished: false,
-	})
-	taskList = append(taskList, Tasks{
-		title:    "5th task",
-		finished: true,
-	})
+	// newtask := Tasks{
+	// 	title:    "1st task",
+	// 	finished: false,
+	// }
+	// taskList = append(taskList, newtask)
+	// taskList = append(taskList, Tasks{
+	// 	title:    "2nd task",
+	// 	finished: true,
+	// })
+	// taskList = append(taskList, Tasks{
+	// 	title:    "3rd task",
+	// 	finished: false,
+	// })
+	// taskList = append(taskList, Tasks{
+	// 	title:    "4th task",
+	// 	finished: false,
+	// })
+	// taskList = append(taskList, Tasks{
+	// 	title:    "5th task",
+	// 	finished: true,
+	// })
 
 	for choise != 5 {
 		fmt.Println("")
@@ -65,8 +65,8 @@ func main() {
 		case 4:
 			deleteTask()
 			continue
-		case 5:
-			fmt.Println("chose 5")
+		default :
+			fmt.Println("Exiting the program")
 			continue
 		}
 	}
@@ -78,6 +78,7 @@ func viewAllTask() {
 
 	if len(taskList) > 0 {
 		fmt.Println("All the task are below:")
+		fmt.Println("")
 
 		for i := 0; i < len(taskList); i++ {
 			status := "❌"
@@ -118,11 +119,13 @@ func completeTask(){
 	viewAllTask()
 
 	completed := 0
+	fmt.Println("")
 	fmt.Print("Enter the number of task you completed or 0 to discard: ")
 	fmt.Scan(&completed)
+	fmt.Println("")
 
 	if completed == 0 || completed > len(taskList) {
-		fmt.Println("No task is removed")
+		fmt.Println("No changes have been made")
 		return
 	}
 
@@ -135,8 +138,10 @@ func deleteTask(){
 	viewAllTask()
 
 	del := 0
+	fmt.Println("")
 	fmt.Print("Enter the number of task you want to delete or 0 to discard: ")
 	fmt.Scan(&del)
+	fmt.Println("")
 
 	if del == 0 || del > len(taskList) {
 		fmt.Println("No task is removed")
