@@ -63,7 +63,7 @@ func main() {
 			completeTask()
 			continue
 		case 4:
-			fmt.Println("chose 4")
+			deleteTask()
 			continue
 		case 5:
 			fmt.Println("chose 5")
@@ -115,6 +115,23 @@ func addTask(){
 }
 
 func completeTask(){
+	viewAllTask()
+
+	del := 0
+	fmt.Println("Enter the number of task you want to delete or 0 to discard: ")
+	fmt.Scan(&del)
+
+	if del == 0 || del > len(taskList) {
+		fmt.Println("No task is removed")
+		return
+	}
+
+	taskList = slices.Delete(taskList, del-1, del)
+
+	viewAllTask()
+}
+
+func deleteTask(){
 	viewAllTask()
 
 	del := 0
