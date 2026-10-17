@@ -124,7 +124,7 @@ func completeTask(){
 	fmt.Scan(&completed)
 	fmt.Println("")
 
-	if completed == 0 || completed > len(taskList) {
+	if completed <= 0 || completed > len(taskList) {
 		fmt.Println("No changes have been made")
 		return
 	}
@@ -143,7 +143,7 @@ func deleteTask(){
 	fmt.Scan(&del)
 	fmt.Println("")
 
-	if del == 0 || del > len(taskList) {
+	if del <= 0 || del > len(taskList) {
 		fmt.Println("No task is removed")
 		return
 	}
