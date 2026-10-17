@@ -107,7 +107,7 @@ func viewAllTask() {
 			if taskList[i].finished {
 				status = "✅"
 			}
-			fmt.Println(i+1, taskList[i].title + " ", status)
+			fmt.Printf("%d. %s  %s \n", i+1, taskList[i].title, status)
 		}
 	}else{
 		fmt.Println("No task to show!!")
