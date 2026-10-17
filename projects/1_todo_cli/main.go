@@ -16,7 +16,6 @@ var taskList []Tasks
 
 func main() {
 
-	choise := 0
 	// newtask := Tasks{
 	// 	title:    "1st task",
 	// 	finished: false,
@@ -39,37 +38,7 @@ func main() {
 	// 	finished: true,
 	// })
 
-	for choise != 5 {
-		fmt.Println("")
-		fmt.Println("========= TODO CLI =========")
-		
-		// show menu
-		fmt.Printf("1. Add a Task\n2. View all Task\n3. Complete a Task\n4. Delete a Task\n5. Exit\n")
-		fmt.Println("")
-		
-		// choose an option
-		fmt.Print("Choose an option: ")
-		fmt.Scan(&choise)
-		fmt.Println("")
-
-		switch choise {
-		case 1:
-			addTask()
-			continue
-		case 2:
-			viewAllTask()
-			continue
-		case 3:
-			completeTask()
-			continue
-		case 4:
-			deleteTask()
-			continue
-		default :
-			fmt.Println("Exiting the program")
-			continue
-		}
-	}
+	start()
 	fmt.Println("")
 
 }
@@ -92,6 +61,38 @@ func viewAllTask() {
 	}
 }
 
+
+func start(){
+	choise := 0
+
+	for choise != 5 {
+		fmt.Println("")
+		fmt.Println("========= TODO CLI =========")
+		
+		// show menu
+		fmt.Printf("1. Add a Task\n2. View all Task\n3. Complete a Task\n4. Delete a Task\n5. Exit\n")
+		fmt.Println("")
+		
+		// choose an option
+		fmt.Print("Choose an option: ")
+		fmt.Scan(&choise)
+		fmt.Println("")
+
+		switch choise {
+		case 1:
+			addTask()
+		case 2:
+			viewAllTask()
+		case 3:
+			completeTask()
+		case 4:
+			deleteTask()
+		default :
+			fmt.Println("Exiting the program")
+			choise = 5
+		}
+	}
+}
 
 
 func addTask(){
