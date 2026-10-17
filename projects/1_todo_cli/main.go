@@ -43,25 +43,6 @@ func main() {
 
 }
 
-func viewAllTask() {
-
-	if len(taskList) > 0 {
-		fmt.Println("All the task are below:")
-		fmt.Println("")
-
-		for i := 0; i < len(taskList); i++ {
-			status := "❌"
-			if taskList[i].finished {
-				status = "✅"
-			}
-			fmt.Println(i+1, taskList[i].title + " ", status)
-		}
-	}else{
-		fmt.Println("No task to show!!")
-	}
-}
-
-
 func start(){
 	choise := 0
 
@@ -94,7 +75,6 @@ func start(){
 	}
 }
 
-
 func addTask(){
 
 	scanner := bufio.NewScanner(os.Stdin)
@@ -114,6 +94,24 @@ func addTask(){
 	fmt.Println("")
 
 	viewAllTask()
+}
+
+func viewAllTask() {
+
+	if len(taskList) > 0 {
+		fmt.Println("All the task are below:")
+		fmt.Println("")
+
+		for i := 0; i < len(taskList); i++ {
+			status := "❌"
+			if taskList[i].finished {
+				status = "✅"
+			}
+			fmt.Println(i+1, taskList[i].title + " ", status)
+		}
+	}else{
+		fmt.Println("No task to show!!")
+	}
 }
 
 func completeTask(){
