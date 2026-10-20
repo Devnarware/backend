@@ -151,3 +151,11 @@ func deleteTask(){
 
 	viewAllTask()
 }
+
+
+
+// 	1. program should only fiinish when i press 5
+// 	2. fix the input issues 
+// 	3. empty input error
+// 	4. data storing  
+// 	5. editing the task, and its status
