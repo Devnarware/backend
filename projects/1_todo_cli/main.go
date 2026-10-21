@@ -52,15 +52,21 @@ func start(){
 	for choise != 5 {
 		fmt.Println("")
 		fmt.Println("========= TODO CLI =========")
+		fmt.Println("")
 		
 		// show menu
 		fmt.Printf("1. Add a Task\n2. View all Task\n3. Complete a Task\n4. Delete a Task\n5. Exit\n")
 		fmt.Println("")
 		
 		// choose an option
-		fmt.Print("Choose an option: ")
-		fmt.Scan(&choise)
+		input, err := readIntput("Choose an option: ")
+		choise = input
 		fmt.Println("")
+
+		if err != nil || choise < 1 || choise > 5{
+			fmt.Println("------------- Ivalid input -----------")
+			continue
+		}
 
 		switch choise {
 		case 1:
@@ -71,9 +77,8 @@ func start(){
 			completeTask()
 		case 4:
 			deleteTask()
-		default :
+		case 5:
 			fmt.Println("Exiting the program")
-			choise = 5
 		}
 	}
 }
