@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"os"
 	"slices"
+	"strconv"
+	"strings"
 )	
 
 type Tasks struct {
@@ -13,6 +15,7 @@ type Tasks struct {
 }
 
 var taskList []Tasks
+var scanner = bufio.NewScanner(os.Stdin)
 
 func main() {
 
@@ -153,6 +156,16 @@ func deleteTask(){
 }
 
 
+// =========.  ERROR HANDLING .=========
+
+func readIntput(msg string) (int, error){
+	fmt.Print(msg)
+	scanner.Scan()
+
+	input := strings.TrimSpace(scanner.Text())
+
+	return strconv.Atoi(input)
+}
 
 // 	1. program should only fiinish when i press 5
 // 	2. fix the input issues 
