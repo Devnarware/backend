@@ -85,8 +85,6 @@ func start(){
 
 func addTask(){
 
-	scanner := bufio.NewScanner(os.Stdin)
-
 	newtask := Tasks{
 		title: "",
 		finished: false,
@@ -94,9 +92,14 @@ func addTask(){
 
 
 	fmt.Print("Enter the task tile: ")
-	 if scanner.Scan() {
+		scanner.Scan()
         newtask.title = scanner.Text()
-    }
+
+		if newtask.title == ""{
+			fmt.Println("")
+			fmt.Println("------------- Task cant be empty ---------")
+			return
+		}
 
 	taskList = append(taskList, newtask)
 	fmt.Println("")
@@ -173,7 +176,7 @@ func readIntput(msg string) (int, error){
 }
 
 // 	1. program should only fiinish when i press 5
-// 	2. fix the input issues 
+// 	2. fix the input issues ✅
 // 	3. empty input error
 // 	4. data storing  
 // 	5. editing the task, and its status
