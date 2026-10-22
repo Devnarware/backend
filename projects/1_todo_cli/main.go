@@ -128,14 +128,18 @@ func viewAllTask() {
 func completeTask(){
 	viewAllTask()
 
-	completed := 0
+	// completed := 0
 	fmt.Println("")
-	fmt.Print("Enter the number of task you completed or 0 to discard: ")
-	fmt.Scan(&completed)
+	completed, err := readIntput("Enter the number of task you completed or 0 to discard: ")
 	fmt.Println("")
 
 	if completed <= 0 || completed > len(taskList) {
 		fmt.Println("No changes have been made")
+		return
+	}
+
+	if err != nil {
+		fmt.Println("------- Ivalid Input -------")
 		return
 	}
 
@@ -147,14 +151,18 @@ func completeTask(){
 func deleteTask(){
 	viewAllTask()
 
-	del := 0
+	// del := 0
 	fmt.Println("")
-	fmt.Print("Enter the number of task you want to delete or 0 to discard: ")
-	fmt.Scan(&del)
+	del, err := readIntput("Enter the number of task you want to delete or 0 to discard: ")
 	fmt.Println("")
 
 	if del <= 0 || del > len(taskList) {
 		fmt.Println("No task is removed")
+		return
+	}
+
+	if err != nil {
+		fmt.Println("------- Ivalid Input -------")
 		return
 	}
 
@@ -175,8 +183,8 @@ func readIntput(msg string) (int, error){
 	return strconv.Atoi(input)
 }
 
-// 	1. program should only fiinish when i press 5
+// 	1. program should only fiinish when i press 5 ✅
 // 	2. fix the input issues ✅
-// 	3. empty input error
+// 	3. empty input error ✅
 // 	4. data storing  
 // 	5. editing the task, and its status
