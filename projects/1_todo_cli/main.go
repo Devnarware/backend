@@ -133,15 +133,16 @@ func completeTask(){
 	completed, err := readIntput("Enter the number of task you completed or 0 to discard: ")
 	fmt.Println("")
 
+	if err != nil {
+		fmt.Println("------- Ivalid Input -------")
+		return
+	}
+
 	if completed <= 0 || completed > len(taskList) {
 		fmt.Println("No changes have been made")
 		return
 	}
 
-	if err != nil {
-		fmt.Println("------- Ivalid Input -------")
-		return
-	}
 
 	taskList[completed-1].finished = true
 
@@ -156,13 +157,14 @@ func deleteTask(){
 	del, err := readIntput("Enter the number of task you want to delete or 0 to discard: ")
 	fmt.Println("")
 
-	if del <= 0 || del > len(taskList) {
-		fmt.Println("No task is removed")
-		return
-	}
 
 	if err != nil {
 		fmt.Println("------- Ivalid Input -------")
+		return
+	}
+
+	if del <= 0 || del > len(taskList) {
+		fmt.Println("No task is removed")
 		return
 	}
 
