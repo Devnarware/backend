@@ -7,6 +7,7 @@ import (
 	"slices"
 	"strconv"
 	"strings"
+	"io"
 )	
 
 type Tasks struct {
@@ -62,6 +63,10 @@ func start(){
 		input, err := readIntput("Choose an option: ")
 		choise = input
 		fmt.Println("")
+
+		if err == io.EOF{
+			break
+		}
 
 		if err != nil || choise < 1 || choise > 5{
 			fmt.Println("------------- Ivalid input -----------")
@@ -178,9 +183,14 @@ func deleteTask(){
 
 func readIntput(msg string) (int, error){
 	fmt.Print(msg)
-	scanner.Scan()
 
-	input := strings.TrimSpace(scanner.Text())
+	var input string
+
+	if scanner.Scan() {
+		input = strings.TrimSpace(scanner.Text())
+	}else{
+		return -1, io.EOF
+	}
 
 	return strconv.Atoi(input)
 }
