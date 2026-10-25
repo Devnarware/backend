@@ -100,6 +100,8 @@ func addTask(){
 		scanner.Scan()
         newtask.title = scanner.Text()
 
+		 // 🔴 fix: here i dint check for empty input or extra white spaces
+
 		if newtask.title == ""{
 			fmt.Println("")
 			fmt.Println("------------- Task cant be empty ---------")
@@ -191,6 +193,8 @@ func readIntput(msg string) (int, error){
 	}else{
 		return -1, io.EOF
 	}
+
+	// 🔴 fix: if the error caused due to the scanner.scan -> i am still returning io.EOF
 
 	return strconv.Atoi(input)
 }
