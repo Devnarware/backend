@@ -3,12 +3,12 @@ package main
 import (
 	"bufio"
 	"fmt"
+	"io"
 	"os"
 	"slices"
 	"strconv"
 	"strings"
-	"io"
-)	
+)
 
 type Tasks struct {
 	title    string
@@ -47,33 +47,32 @@ func main() {
 
 }
 
-func start(){
-	choise := 0
+func start() {
+	choice := 0
 
-	for choise != 5 {
+	for choice != 5 {
 		fmt.Println("")
 		fmt.Println("========= TODO CLI =========")
 		fmt.Println("")
-		
+
 		// show menu
 		fmt.Printf("1. Add a Task\n2. View all Task\n3. Complete a Task\n4. Delete a Task\n5. Exit\n")
 		fmt.Println("")
-		
+
 		// choose an option
-		input, err := readIntput("Choose an option: ")
-		choise = input
+		input, err := readInput("Choose an option: ")
+		choice = input
 		fmt.Println("")
 
-		if err == io.EOF{
-			break
-		}
-
-		if err != nil || choise < 1 || choise > 5{
-			fmt.Println("------------- Ivalid input -----------")
+		if err != nil{
+			fmt.Println("------------ Error: ", err, "-------------")
+			return
+		}else if choice < 1 || choice > 5 {
+			fmt.Println("------------- Invalid input -----------")
 			continue
 		}
 
-		switch choise {
+		switch choice {
 		case 1:
 			addTask()
 		case 2:
@@ -88,23 +87,37 @@ func start(){
 	}
 }
 
-func addTask(){
+func addTask() {
 
 	newtask := Tasks{
-		title: "",
+		title:    "",
 		finished: false,
 	}
 
+	fmt.Print("Enter the task title: ")
 
-	fmt.Print("Enter the task tile: ")
-		scanner.Scan()
-        newtask.title = scanner.Text()
+	if scanner.Scan() {
+		newtask.title = strings.TrimSpace(scanner.Text())
+	} else {
 
-		if newtask.title == ""{
-			fmt.Println("")
-			fmt.Println("------------- Task cant be empty ---------")
+		err := scanner.Err()
+		if err != nil {
+			fmt.Println("------------ Error: ", err, "-------------")
 			return
 		}
+
+		fmt.Println("")
+		fmt.Println("------------- EOF ------------")
+		return
+	}
+
+	// 🔴 fix: here i dint check for empty input or extra white spaces
+
+	if newtask.title == "" {
+		fmt.Println("")
+		fmt.Println("------------- Task cant be empty ---------")
+		return
+	}
 
 	taskList = append(taskList, newtask)
 	fmt.Println("")
@@ -125,21 +138,21 @@ func viewAllTask() {
 			}
 			fmt.Printf("%d. %s  %s \n", i+1, taskList[i].title, status)
 		}
-	}else{
+	} else {
 		fmt.Println("No task to show!!")
 	}
 }
 
-func completeTask(){
+func completeTask() {
 	viewAllTask()
 
 	// completed := 0
 	fmt.Println("")
-	completed, err := readIntput("Enter the number of task you completed or 0 to discard: ")
+	completed, err := readInput("Enter the S.No of task you completed or 0 to discard: ")
 	fmt.Println("")
 
 	if err != nil {
-		fmt.Println("------- Ivalid Input -------")
+		fmt.Println("------------ Error: ", err, "-------------")
 		return
 	}
 
@@ -148,23 +161,21 @@ func completeTask(){
 		return
 	}
 
-
-	taskList[completed-1].finished = true
+	taskList[completed-1].finished = !taskList[completed-1].finished
 
 	viewAllTask()
 }
 
-func deleteTask(){
+func deleteTask() {
 	viewAllTask()
 
 	// del := 0
 	fmt.Println("")
-	del, err := readIntput("Enter the number of task you want to delete or 0 to discard: ")
+	del, err := readInput("Enter the number of task you want to delete or 0 to discard: ")
 	fmt.Println("")
 
-
 	if err != nil {
-		fmt.Println("------- Ivalid Input -------")
+		fmt.Println("------------ Error: ", err, "-------------")
 		return
 	}
 
@@ -178,19 +189,26 @@ func deleteTask(){
 	viewAllTask()
 }
 
-
 // =========.  ERROR HANDLING .=========
 
-func readIntput(msg string) (int, error){
+func readInput(msg string) (int, error) {
 	fmt.Print(msg)
 
 	var input string
 
 	if scanner.Scan() {
 		input = strings.TrimSpace(scanner.Text())
-	}else{
+	} else {
+
+		err := scanner.Err()
+		if err != nil {
+			return -1, err
+		}
+
 		return -1, io.EOF
 	}
+
+	// 🔴 fix: if the error caused due to the scanner.scan -> i am still returning io.EOF
 
 	return strconv.Atoi(input)
 }
@@ -198,5 +216,5 @@ func readIntput(msg string) (int, error){
 // 	1. program should only fiinish when i press 5 ✅
 // 	2. fix the input issues ✅
 // 	3. empty input error ✅
-// 	4. data storing  
+// 	4. data storing
 // 	5. editing the task, and its status
