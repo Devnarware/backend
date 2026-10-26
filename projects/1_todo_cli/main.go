@@ -48,9 +48,9 @@ func main() {
 }
 
 func start() {
-	choise := 0
+	choice := 0
 
-	for choise != 5 {
+	for choice != 5 {
 		fmt.Println("")
 		fmt.Println("========= TODO CLI =========")
 		fmt.Println("")
@@ -60,20 +60,21 @@ func start() {
 		fmt.Println("")
 
 		// choose an option
-		input, err := readIntput("Choose an option: ")
-		choise = input
+		input, err := readInput("Choose an option: ")
+		choice = input
 		fmt.Println("")
 
-		if err == io.EOF {
-			break
+		if err != nil{
+			fmt.Println("------------ Error: ", err, "-------------")
+			return
 		}
 
-		if err != nil || choise < 1 || choise > 5 {
-			fmt.Println("------------- Ivalid input -----------")
+		if choice < 1 || choice > 5 {
+			fmt.Println("------------- Invalid input -----------")
 			continue
 		}
 
-		switch choise {
+		switch choice {
 		case 1:
 			addTask()
 		case 2:
@@ -100,8 +101,15 @@ func addTask() {
 	if scanner.Scan() {
 		newtask.title = strings.TrimSpace(scanner.Text())
 	} else {
+
+		err := scanner.Err()
+		if err != nil {
+			fmt.Println("------------ Error: ", err, "-------------")
+			return
+		}
+
 		fmt.Println("")
-		fmt.Println("------------- Invalid Input ------------")
+		fmt.Println("------------- EOF ------------")
 		return
 	}
 
@@ -142,11 +150,11 @@ func completeTask() {
 
 	// completed := 0
 	fmt.Println("")
-	completed, err := readIntput("Enter the number of task you completed or 0 to discard: ")
+	completed, err := readInput("Enter the number of task you completed or 0 to discard: ")
 	fmt.Println("")
 
 	if err != nil {
-		fmt.Println("------- Ivalid Input -------")
+		fmt.Println("------- Invalid Input -------")
 		return
 	}
 
@@ -165,11 +173,11 @@ func deleteTask() {
 
 	// del := 0
 	fmt.Println("")
-	del, err := readIntput("Enter the number of task you want to delete or 0 to discard: ")
+	del, err := readInput("Enter the number of task you want to delete or 0 to discard: ")
 	fmt.Println("")
 
 	if err != nil {
-		fmt.Println("------- Ivalid Input -------")
+		fmt.Println("------- Invalid Input -------")
 		return
 	}
 
@@ -185,7 +193,7 @@ func deleteTask() {
 
 // =========.  ERROR HANDLING .=========
 
-func readIntput(msg string) (int, error) {
+func readInput(msg string) (int, error) {
 	fmt.Print(msg)
 
 	var input string
@@ -193,6 +201,12 @@ func readIntput(msg string) (int, error) {
 	if scanner.Scan() {
 		input = strings.TrimSpace(scanner.Text())
 	} else {
+
+		err := scanner.Err()
+		if err != nil {
+			return -1, err
+		}
+
 		return -1, io.EOF
 	}
 
