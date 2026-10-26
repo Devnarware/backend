@@ -67,9 +67,7 @@ func start() {
 		if err != nil{
 			fmt.Println("------------ Error: ", err, "-------------")
 			return
-		}
-
-		if choice < 1 || choice > 5 {
+		}else if choice < 1 || choice > 5 {
 			fmt.Println("------------- Invalid input -----------")
 			continue
 		}
@@ -150,11 +148,11 @@ func completeTask() {
 
 	// completed := 0
 	fmt.Println("")
-	completed, err := readInput("Enter the number of task you completed or 0 to discard: ")
+	completed, err := readInput("Enter the S.No of task you completed or 0 to discard: ")
 	fmt.Println("")
 
 	if err != nil {
-		fmt.Println("------- Invalid Input -------")
+		fmt.Println("------------ Error: ", err, "-------------")
 		return
 	}
 
@@ -163,7 +161,7 @@ func completeTask() {
 		return
 	}
 
-	taskList[completed-1].finished = true
+	taskList[completed-1].finished = !taskList[completed-1].finished
 
 	viewAllTask()
 }
@@ -177,7 +175,7 @@ func deleteTask() {
 	fmt.Println("")
 
 	if err != nil {
-		fmt.Println("------- Invalid Input -------")
+		fmt.Println("------------ Error: ", err, "-------------")
 		return
 	}
 
