@@ -95,9 +95,14 @@ func addTask() {
 		finished: false,
 	}
 
-	fmt.Print("Enter the task tile: ")
+	fmt.Print("Enter the task title: ")
+
 	if scanner.Scan() {
-		newtask.title = scanner.Text()
+		newtask.title = strings.TrimSpace(scanner.Text())
+	} else {
+		fmt.Println("")
+		fmt.Println("------------- Invalid Input ------------")
+		return
 	}
 
 	// 🔴 fix: here i dint check for empty input or extra white spaces
