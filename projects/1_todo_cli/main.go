@@ -11,7 +11,7 @@ import (
 )
 
 type Tasks struct {
-	title    string
+	title   string
 	finished bool
 }
 
