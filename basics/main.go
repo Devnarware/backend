@@ -1,13 +1,14 @@
 package main
 
-import (
-	// "fmt"
-)
+
+
+// "fmt"
 
 func main(){
 //    BasicServer()
 	// myErrors()
-	dataHandling()
+	// dataHandling()
+	storage()
 
 
 	// arr := []int{11,22,33,44,545}
