@@ -2,7 +2,7 @@ package main
 
 import (
 	"encoding/json"
-	// "fmt"
+	"fmt"
 	"log"
 	"os"
 )
@@ -13,13 +13,21 @@ type Student struct{
 }
 
 func storage() {
-	data, err := encode()
+	// data, err := encode()
 
-	if err != nil {
-		log.Fatal(err)
+	// if err != nil {
+	// 	log.Fatal(err)
+	// }
+
+	// os.WriteFile("storage.json", data, 0644)
+
+	read, err2 := os.ReadFile("storage.json")
+
+	if err2 != nil {
+		log.Fatal("Error: ", err2)
 	}
 
-	os.WriteFile("storage.json", data, 0644)
+	fmt.Println(string(read))
 }
 
 func encode() ([]byte, error){
@@ -37,7 +45,8 @@ func encode() ([]byte, error){
 	}
 
 	list := []Student{student1, student2, student3}
-	data, err := json.MarshalIndent(list, "", "\t")
+	data, err := json.Marshal(list)
+
 
 	return data, err
 }
