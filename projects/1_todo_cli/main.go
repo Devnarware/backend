@@ -22,52 +22,12 @@ var scanner = bufio.NewScanner(os.Stdin)
 
 func main() {
 
-	// newtask := Tasks{
-	// 	title:    "1st task",
-	// 	Finished: false,
-	// }
-	// Tasklist = append(Tasklist, newtask)
-	// Tasklist = append(Tasklist, Tasks{
-	// 	title:    "2nd task",
-	// 	Finished: true,
-	// })
-	// Tasklist = append(Tasklist, Tasks{
-	// 	title:    "3rd task",
-	// 	Finished: false,
-	// })
-	// Tasklist = append(Tasklist, Tasks{
-	// 	title:    "4th task",
-	// 	Finished: false,
-	// })
-	// Tasklist = append(Tasklist, Tasks{
-	// 	title:    "5th task",
-	// 	Finished: true,
-	// })
-
-	// getting the data
-	prevTodos, err := os.ReadFile("todo.json")
-
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	// oldTasks := Tasks{
-		
-	// }
-
-	err = json.Unmarshal(prevTodos, &Tasklist)
+	getData()
 
 	start()
 	fmt.Println("")
 
-	// storing the data
-	todos, err := json.MarshalIndent(Tasklist, "", "\t")
-
-	if err != nil {
-		log.Fatal("Error: ", err)
-	}
-
-	os.WriteFile("todo.json", todos, 0644)
+	storeData()
 
 }
 
@@ -237,8 +197,30 @@ func readInput(msg string) (int, error) {
 	return strconv.Atoi(input)
 }
 
+func getData(){
+	// getting the data
+	prevTodos, err := os.ReadFile("todo.json")
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	err = json.Unmarshal(prevTodos, &Tasklist)
+}
+
+func storeData(){
+	// storing the data
+	todos, err := json.MarshalIndent(Tasklist, "", "\t")
+
+	if err != nil {
+		log.Fatal("Error: ", err)
+	}
+
+	os.WriteFile("todo.json", todos, 0644)
+}
+
 // 	1. program should only fiinish when i press 5 ✅
 // 	2. fix the input issues ✅
 // 	3. empty input error ✅
-// 	4. data storing
+// 	4. data storing ✅
 // 	5. editing the task, and its status
