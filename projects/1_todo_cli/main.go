@@ -17,7 +17,7 @@ type Tasks struct {
 	Finished bool
 }
 
-var taskList []Tasks
+var Tasklist []Tasks
 var scanner = bufio.NewScanner(os.Stdin)
 
 func main() {
@@ -26,29 +26,42 @@ func main() {
 	// 	title:    "1st task",
 	// 	Finished: false,
 	// }
-	// taskList = append(taskList, newtask)
-	// taskList = append(taskList, Tasks{
+	// Tasklist = append(Tasklist, newtask)
+	// Tasklist = append(Tasklist, Tasks{
 	// 	title:    "2nd task",
 	// 	Finished: true,
 	// })
-	// taskList = append(taskList, Tasks{
+	// Tasklist = append(Tasklist, Tasks{
 	// 	title:    "3rd task",
 	// 	Finished: false,
 	// })
-	// taskList = append(taskList, Tasks{
+	// Tasklist = append(Tasklist, Tasks{
 	// 	title:    "4th task",
 	// 	Finished: false,
 	// })
-	// taskList = append(taskList, Tasks{
+	// Tasklist = append(Tasklist, Tasks{
 	// 	title:    "5th task",
 	// 	Finished: true,
 	// })
+
+	// getting the data
+	prevTodos, err := os.ReadFile("todo.json")
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	// oldTasks := Tasks{
+		
+	// }
+
+	err = json.Unmarshal(prevTodos, &Tasklist)
 
 	start()
 	fmt.Println("")
 
 	// storing the data
-	todos, err := json.MarshalIndent(taskList, "", "\t")
+	todos, err := json.MarshalIndent(Tasklist, "", "\t")
 
 	if err != nil {
 		log.Fatal("Error: ", err)
@@ -130,7 +143,7 @@ func addTask() {
 		return
 	}
 
-	taskList = append(taskList, newtask)
+	Tasklist = append(Tasklist, newtask)
 	fmt.Println("")
 
 	viewAllTask()
@@ -138,16 +151,16 @@ func addTask() {
 
 func viewAllTask() {
 
-	if len(taskList) > 0 {
+	if len(Tasklist) > 0 {
 		fmt.Println("All the task are below:")
 		fmt.Println("")
 
-		for i := 0; i < len(taskList); i++ {
+		for i := 0; i < len(Tasklist); i++ {
 			status := "❌"
-			if taskList[i].Finished {
+			if Tasklist[i].Finished {
 				status = "✅"
 			}
-			fmt.Printf("%d. %s  %s \n", i+1, taskList[i].Title, status)
+			fmt.Printf("%d. %s  %s \n", i+1, Tasklist[i].Title, status)
 		}
 	} else {
 		fmt.Println("No task to show!!")
@@ -167,12 +180,12 @@ func completeTask() {
 		return
 	}
 
-	if completed <= 0 || completed > len(taskList) {
+	if completed <= 0 || completed > len(Tasklist) {
 		fmt.Println("No changes have been made")
 		return
 	}
 
-	taskList[completed-1].Finished = !taskList[completed-1].Finished
+	Tasklist[completed-1].Finished = !Tasklist[completed-1].Finished
 
 	viewAllTask()
 }
@@ -190,12 +203,12 @@ func deleteTask() {
 		return
 	}
 
-	if del <= 0 || del > len(taskList) {
+	if del <= 0 || del > len(Tasklist) {
 		fmt.Println("No task is removed")
 		return
 	}
 
-	taskList = slices.Delete(taskList, del-1, del)
+	Tasklist = slices.Delete(Tasklist, del-1, del)
 
 	viewAllTask()
 }
