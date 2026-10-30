@@ -2,8 +2,10 @@ package main
 
 import (
 	"bufio"
+	"encoding/json"
 	"fmt"
 	"io"
+	"log"
 	"os"
 	"slices"
 	"strconv"
@@ -11,8 +13,8 @@ import (
 )
 
 type Tasks struct {
-	title   string
-	finished bool
+	Title   string
+	Finished bool
 }
 
 var taskList []Tasks
@@ -22,28 +24,37 @@ func main() {
 
 	// newtask := Tasks{
 	// 	title:    "1st task",
-	// 	finished: false,
+	// 	Finished: false,
 	// }
 	// taskList = append(taskList, newtask)
 	// taskList = append(taskList, Tasks{
 	// 	title:    "2nd task",
-	// 	finished: true,
+	// 	Finished: true,
 	// })
 	// taskList = append(taskList, Tasks{
 	// 	title:    "3rd task",
-	// 	finished: false,
+	// 	Finished: false,
 	// })
 	// taskList = append(taskList, Tasks{
 	// 	title:    "4th task",
-	// 	finished: false,
+	// 	Finished: false,
 	// })
 	// taskList = append(taskList, Tasks{
 	// 	title:    "5th task",
-	// 	finished: true,
+	// 	Finished: true,
 	// })
 
 	start()
 	fmt.Println("")
+
+	// storing the data
+	todos, err := json.MarshalIndent(taskList, "", "\t")
+
+	if err != nil {
+		log.Fatal("Error: ", err)
+	}
+
+	os.WriteFile("todo.json", todos, 0644)
 
 }
 
@@ -90,14 +101,14 @@ func start() {
 func addTask() {
 
 	newtask := Tasks{
-		title:    "",
-		finished: false,
+		Title:    "",
+		Finished: false,
 	}
 
 	fmt.Print("Enter the task title: ")
 
 	if scanner.Scan() {
-		newtask.title = strings.TrimSpace(scanner.Text())
+		newtask.Title = strings.TrimSpace(scanner.Text())
 	} else {
 
 		err := scanner.Err()
@@ -113,7 +124,7 @@ func addTask() {
 
 	// 🔴 fix: here i dint check for empty input or extra white spaces
 
-	if newtask.title == "" {
+	if newtask.Title == "" {
 		fmt.Println("")
 		fmt.Println("------------- Task cant be empty ---------")
 		return
@@ -133,10 +144,10 @@ func viewAllTask() {
 
 		for i := 0; i < len(taskList); i++ {
 			status := "❌"
-			if taskList[i].finished {
+			if taskList[i].Finished {
 				status = "✅"
 			}
-			fmt.Printf("%d. %s  %s \n", i+1, taskList[i].title, status)
+			fmt.Printf("%d. %s  %s \n", i+1, taskList[i].Title, status)
 		}
 	} else {
 		fmt.Println("No task to show!!")
@@ -161,7 +172,7 @@ func completeTask() {
 		return
 	}
 
-	taskList[completed-1].finished = !taskList[completed-1].finished
+	taskList[completed-1].Finished = !taskList[completed-1].Finished
 
 	viewAllTask()
 }
