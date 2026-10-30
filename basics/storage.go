@@ -13,13 +13,13 @@ type Student struct{
 }
 
 func storage() {
-	// data, err := encode()
+	data, err := encode()
 
-	// if err != nil {
-	// 	log.Fatal(err)
-	// }
+	if err != nil {
+		log.Fatal(err)
+	}
 
-	// os.WriteFile("storage.json", data, 0644)
+	os.WriteFile("storage.json", data, 0644)
 
 	read, err2 := os.ReadFile("storage.json")
 
@@ -45,7 +45,7 @@ func encode() ([]byte, error){
 	}
 
 	list := []Student{student1, student2, student3}
-	data, err := json.Marshal(list)
+	data, err := json.MarshalIndent(list, "", "\t")
 
 
 	return data, err
