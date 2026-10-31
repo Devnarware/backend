@@ -2,48 +2,41 @@ package main
 
 import (
 	"bufio"
+	"encoding/json"
 	"fmt"
 	"io"
+	"log"
 	"os"
 	"slices"
 	"strconv"
 	"strings"
+	"errors"
 )
 
 type Tasks struct {
-	title    string
-	finished bool
+	Title   string
+	Finished bool
 }
 
-var taskList []Tasks
+var Tasklist = make([]Tasks, 0)
 var scanner = bufio.NewScanner(os.Stdin)
 
 func main() {
 
-	// newtask := Tasks{
-	// 	title:    "1st task",
-	// 	finished: false,
-	// }
-	// taskList = append(taskList, newtask)
-	// taskList = append(taskList, Tasks{
-	// 	title:    "2nd task",
-	// 	finished: true,
-	// })
-	// taskList = append(taskList, Tasks{
-	// 	title:    "3rd task",
-	// 	finished: false,
-	// })
-	// taskList = append(taskList, Tasks{
-	// 	title:    "4th task",
-	// 	finished: false,
-	// })
-	// taskList = append(taskList, Tasks{
-	// 	title:    "5th task",
-	// 	finished: true,
-	// })
+	err := getData()
+
+	if err != nil {
+		log.Fatal("Fetching data error", err)
+	}
 
 	start()
 	fmt.Println("")
+
+	err = storeData()
+
+	if err != nil {
+		log.Fatal("Storing data error", err)
+	}
 
 }
 
@@ -90,14 +83,14 @@ func start() {
 func addTask() {
 
 	newtask := Tasks{
-		title:    "",
-		finished: false,
+		Title:    "",
+		Finished: false,
 	}
 
 	fmt.Print("Enter the task title: ")
 
 	if scanner.Scan() {
-		newtask.title = strings.TrimSpace(scanner.Text())
+		newtask.Title = strings.TrimSpace(scanner.Text())
 	} else {
 
 		err := scanner.Err()
@@ -113,13 +106,13 @@ func addTask() {
 
 	// 🔴 fix: here i dint check for empty input or extra white spaces
 
-	if newtask.title == "" {
+	if newtask.Title == "" {
 		fmt.Println("")
 		fmt.Println("------------- Task cant be empty ---------")
 		return
 	}
 
-	taskList = append(taskList, newtask)
+	Tasklist = append(Tasklist, newtask)
 	fmt.Println("")
 
 	viewAllTask()
@@ -127,16 +120,16 @@ func addTask() {
 
 func viewAllTask() {
 
-	if len(taskList) > 0 {
+	if len(Tasklist) > 0 {
 		fmt.Println("All the task are below:")
 		fmt.Println("")
 
-		for i := 0; i < len(taskList); i++ {
+		for i := 0; i < len(Tasklist); i++ {
 			status := "❌"
-			if taskList[i].finished {
+			if Tasklist[i].Finished {
 				status = "✅"
 			}
-			fmt.Printf("%d. %s  %s \n", i+1, taskList[i].title, status)
+			fmt.Printf("%d. %s  %s \n", i+1, Tasklist[i].Title, status)
 		}
 	} else {
 		fmt.Println("No task to show!!")
@@ -156,12 +149,12 @@ func completeTask() {
 		return
 	}
 
-	if completed <= 0 || completed > len(taskList) {
+	if completed <= 0 || completed > len(Tasklist) {
 		fmt.Println("No changes have been made")
 		return
 	}
 
-	taskList[completed-1].finished = !taskList[completed-1].finished
+	Tasklist[completed-1].Finished = !Tasklist[completed-1].Finished
 
 	viewAllTask()
 }
@@ -179,19 +172,19 @@ func deleteTask() {
 		return
 	}
 
-	if del <= 0 || del > len(taskList) {
+	if del <= 0 || del > len(Tasklist) {
 		fmt.Println("No task is removed")
 		return
 	}
 
-	taskList = slices.Delete(taskList, del-1, del)
+	Tasklist = slices.Delete(Tasklist, del-1, del)
 
 	viewAllTask()
 }
 
 // =========.  ERROR HANDLING .=========
 
-func readInput(msg string) (int, error) {
+func readInput(msg string) (int, error){
 	fmt.Print(msg)
 
 	var input string
@@ -213,8 +206,53 @@ func readInput(msg string) (int, error) {
 	return strconv.Atoi(input)
 }
 
+func getData() error{
+
+	prevTodos, err := os.ReadFile("todo.json")
+
+	if err != nil {
+		if errors.Is(err, os.ErrNotExist){
+
+			err = storeData()
+			if err != nil {
+				return err
+			}
+			
+			return nil
+
+		}else{
+			return err
+		}
+	}
+	
+	err = json.Unmarshal(prevTodos, &Tasklist)
+	
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func storeData() error{
+	// storing the data
+	todos, err := json.MarshalIndent(Tasklist, "", "\t")
+
+	if err != nil {
+		return err
+	}
+
+	err = os.WriteFile("todo.json", todos, 0644)
+
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
 // 	1. program should only fiinish when i press 5 ✅
 // 	2. fix the input issues ✅
 // 	3. empty input error ✅
-// 	4. data storing
+// 	4. data storing ✅
 // 	5. editing the task, and its status
