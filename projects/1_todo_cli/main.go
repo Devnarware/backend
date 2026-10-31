@@ -23,12 +23,20 @@ var scanner = bufio.NewScanner(os.Stdin)
 
 func main() {
 
-	getData()
+	err := getData()
+
+	if err != nil {
+		log.Fatal("Fetching data error", err)
+	}
 
 	start()
 	fmt.Println("")
 
-	storeData()
+	err = storeData()
+
+	if err != nil {
+		log.Fatal("Storing data error", err)
+	}
 
 }
 
@@ -176,7 +184,7 @@ func deleteTask() {
 
 // =========.  ERROR HANDLING .=========
 
-func readInput(msg string) (int, error) {
+func readInput(msg string) (int, error){
 	fmt.Print(msg)
 
 	var input string
@@ -198,46 +206,49 @@ func readInput(msg string) (int, error) {
 	return strconv.Atoi(input)
 }
 
-func getData(){
+func getData() error{
 
 	prevTodos, err := os.ReadFile("todo.json")
 
 	if err != nil {
 		if errors.Is(err, os.ErrNotExist){
 
-			storeData()
-
-			prevTodos, err = os.ReadFile("todo.json")
-
+			err = storeData()
 			if err != nil {
-				log.Fatal(err)
+				return err
 			}
+			
+			return nil
 
 		}else{
-			log.Fatal(err)
+			return err
 		}
 	}
 	
 	err = json.Unmarshal(prevTodos, &Tasklist)
 	
 	if err != nil {
-		log.Fatal(err)
+		return err
 	}
+
+	return nil
 }
 
-func storeData(){
+func storeData() error{
 	// storing the data
 	todos, err := json.MarshalIndent(Tasklist, "", "\t")
 
 	if err != nil {
-		log.Fatal("Error: ", err)
+		return err
 	}
 
-	err = os.WriteFile("todo.json", todos, 0666)
+	err = os.WriteFile("todo.json", todos, 0644)
 
 	if err != nil {
-		log.Fatal(err)
+		return err
 	}
+
+	return nil
 }
 
 // 	1. program should only fiinish when i press 5 ✅
