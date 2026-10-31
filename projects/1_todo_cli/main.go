@@ -10,6 +10,7 @@ import (
 	"slices"
 	"strconv"
 	"strings"
+	"errors"
 )
 
 type Tasks struct {
@@ -17,7 +18,7 @@ type Tasks struct {
 	Finished bool
 }
 
-var Tasklist []Tasks
+var Tasklist = make([]Tasks, 0)
 var scanner = bufio.NewScanner(os.Stdin)
 
 func main() {
@@ -198,14 +199,30 @@ func readInput(msg string) (int, error) {
 }
 
 func getData(){
-	// getting the data
+
 	prevTodos, err := os.ReadFile("todo.json")
 
 	if err != nil {
+		if errors.Is(err, os.ErrNotExist){
+
+			storeData()
+
+			prevTodos, err = os.ReadFile("todo.json")
+
+			if err != nil {
+				log.Fatal(err)
+			}
+
+		}else{
+			log.Fatal(err)
+		}
+	}
+	
+	err = json.Unmarshal(prevTodos, &Tasklist)
+	
+	if err != nil {
 		log.Fatal(err)
 	}
-
-	err = json.Unmarshal(prevTodos, &Tasklist)
 }
 
 func storeData(){
@@ -216,7 +233,11 @@ func storeData(){
 		log.Fatal("Error: ", err)
 	}
 
-	os.WriteFile("todo.json", todos, 0644)
+	err = os.WriteFile("todo.json", todos, 0666)
+
+	if err != nil {
+		log.Fatal(err)
+	}
 }
 
 // 	1. program should only fiinish when i press 5 ✅
