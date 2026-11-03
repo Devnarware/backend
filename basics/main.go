@@ -5,10 +5,10 @@ package main
 // "fmt"
 
 func main(){
-//    BasicServer()
+   BasicServer()
 	// myErrors()
 	// dataHandling()
-	storage()
+	// storage()
 
 
 	// arr := []int{11,22,33,44,545}
