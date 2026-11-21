@@ -82,7 +82,16 @@ func deleteMovie(w http.ResponseWriter, r *http.Request) {
 }
 
 func getMovie(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
 
+	id := r.PathValue("id")
+
+	for _, movie := range Movies {
+		if movie.ID == id {
+			json.NewEncoder(w).Encode(movie)
+			break
+		}
+	}
 }
 
 func createMovie(w http.ResponseWriter, r *http.Request) {
