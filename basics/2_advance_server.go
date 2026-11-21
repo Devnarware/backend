@@ -13,9 +13,9 @@ func newServer(){
 
 	mux.Handle("GET /", fileserve)
 	mux.HandleFunc("GET /hello", helloFunc)
-	// mux.HandleFunc("GET /form", func(w http.ResponseWriter, r *http.Request){
-	// 	http.ServeFile(w, r, "./static/form.html")
-	// })
+	mux.HandleFunc("GET /form", func(w http.ResponseWriter, r *http.Request){
+		http.ServeFile(w, r, "./static/form.html")
+	})
 	mux.HandleFunc("POST /form", details)
 
 	fmt.Println("Starting the server at port :8080")
