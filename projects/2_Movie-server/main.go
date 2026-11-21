@@ -6,6 +6,20 @@ import(
 	"net/http"
 )
 
+type Movie struct{
+	Title string `json:"title"`
+	ID string `json:"id"`
+	Isbn string `json:"isbn"`
+	Director *Director `json:"director"`
+}
+
+type Director struct{
+	Firstname string `json:"firstname"`
+	Lastname string `json:"lastname"`
+}
+
+var Movies []Movie
+
 func main(){
 	mux := http.NewServeMux()
 
@@ -24,7 +38,7 @@ func main(){
 }
 
 func home(w http.ResponseWriter, r *http.Request){
-	fileserver := http.FileServer("./statc")
+	http.ServeFile(w, r, "./static/index.html")	
 }
 
 
