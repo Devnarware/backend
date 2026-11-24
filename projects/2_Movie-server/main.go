@@ -1,10 +1,10 @@
 package main
 
 import (
-	"math/rand"
 	"encoding/json"
 	"fmt"
 	"log"
+	"math/rand"
 	"net/http"
 	"strconv"
 )
@@ -101,10 +101,25 @@ func createMovie(w http.ResponseWriter, r *http.Request) {
 	var movie Movie
 	_ = json.NewDecoder(r.Body).Decode(&movie)
 	movie.ID = strconv.Itoa(rand.Intn(10000))
-
+	Movies = append(Movies, movie)
 	json.NewEncoder(w).Encode(movie)
 }
 
 func updateMovie(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
 
+	id := r.PathValue("id")
+
+	for idx, movie := range Movies {
+		if movie.ID == id {
+			Movies = append(Movies[:idx], Movies[idx+1:]...)
+
+			var updatedMovie Movie
+			_ = json.NewDecoder(r.Body).Decode(&updatedMovie)
+			updatedMovie.ID = id
+			Movies = append(Movies, updatedMovie)
+			json.NewEncoder(w).Encode(updatedMovie)
+			return
+		}
+	}
 }
